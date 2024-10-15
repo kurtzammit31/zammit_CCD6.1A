@@ -22,11 +22,12 @@ public class KillBall : MonoBehaviour
             inWorldSpace.z = 0; //make ball between background and camera
 
             //check if this ball is close enought to the click
-            float distance = Vector3.Distance(mousePosition, this.gameObject.transform.position);
+            float distance = Vector3.Distance(inWorldSpace, this.gameObject.transform.position);
 
-            if(distance > 0.5)
+            if(distance < 0.5)
             {
-                Destroy(this.gameObject);   
+                Destroy(this.gameObject);
+                Spawning.count--;
             }
 
         }
