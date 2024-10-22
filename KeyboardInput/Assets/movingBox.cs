@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class movingBox : MonoBehaviour
+public class MovingBox : MonoBehaviour
 {
-    float xMin, yMin, xMax, yMax;
     // Start is called before the first frame update
+    float xMin, yMin, xMax, yMax;
     void Start()
     {
         Vector3 topLeft = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0));
@@ -14,46 +14,47 @@ public class movingBox : MonoBehaviour
         Vector3 bottomLeft = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0));
         Vector3 bottomRight = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, 0));
 
-        xMin = topLeft.x; //or bottomLeft.x
-        xMax = topRight.x; //or bottomRight.x
-        yMin = bottomLeft.y; //or bottomRight.x
-        yMax = topLeft.y; //or topRight.x
+        xMin = topLeft.x + 0.5f; //or bottomLeft.x
+        xMax = topRight.x - 0.5f; // or bottomRight.x
+        yMin = bottomRight.y + 0.5f; // or bottomRight.y
+        yMax = topLeft.y - 0.5f; // or topRight.y
     }
 
     // Update is called once per frame
     void Update()
     {
-       
-        
-        if (Input.GetKeyDown(KeyCode.UpArrow)){
-            this.transform.position = new Vector3(this.transform.position.x,
-                                                  this.transform.position.y + 1,
-                                                  this.transform.position.z);
-            
-        }
-
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            this.transform.position = new Vector3(this.transform.position.x,
-                                                  this.transform.position.y - 1,
-                                                  this.transform.position.z);
-
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            this.transform.position = new Vector3(this.transform.position.x - 1,
-                                                  this.transform.position.y,
-                                                  this.transform.position.z);
-
-        }
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            this.transform.position = new Vector3(this.transform.position.x + 1,
+            float newXPosition = Mathf.Clamp(this.transform.position.x + 1, xMin, xMax);
+
+            this.transform.position = new Vector3(newXPosition,
                                                   this.transform.position.y,
                                                   this.transform.position.z);
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            float newXPosition = Mathf.Clamp(this.transform.position.x - 1, xMin, xMax);
 
+            this.transform.position = new Vector3(newXPosition,
+                                                 this.transform.position.y,
+                                                 this.transform.position.z);
+        }
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            float newYPosition = Mathf.Clamp(this.transform.position.y + 1, yMin, yMax);
+
+            this.transform.position = new Vector3(this.transform.position.x,
+                                                 newYPosition,
+                                                 this.transform.position.z);
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            float newYPosition = Mathf.Clamp(this.transform.position.y - 1, yMin, yMax);
+
+            this.transform.position = new Vector3(this.transform.position.x,
+                                                 newYPosition,
+                                                 this.transform.position.z);
         }
     }
 }
